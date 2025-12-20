@@ -15,8 +15,8 @@ services:
       - key: FLASK_SECRET_KEY
         generateValue: true
 
-# 🎨 Frontend Web (Static Site)
-staticSites:
-  - name: med-assist-frontend
+  # 🎨 Frontend Web (Static Site)
+  - type: static
+    name: med-assist-frontend
     buildCommand: ""
     staticPublishDir: frontend
