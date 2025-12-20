@@ -1,3 +1,5 @@
+version: 1
+
 services:
   # 📡 Backend API (Python Flask)
   - type: web
@@ -9,13 +11,12 @@ services:
     startCommand: "gunicorn --bind 0.0.0.0:$PORT --chdir backend app:app"
     envVars:
       - key: OPENAI_API_KEY
-        sync: false # Set this in the Render dashboard manually
+        sync: false
       - key: FLASK_SECRET_KEY
         generateValue: true
 
-  # 🎨 Frontend Web (Static Site)
-  - type: web
-    name: med-assist-frontend
-    env: static
+# 🎨 Frontend Web (Static Site)
+staticSites:
+  - name: med-assist-frontend
     buildCommand: ""
     staticPublishDir: frontend
