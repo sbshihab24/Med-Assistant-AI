@@ -35,9 +35,9 @@ fileInput.addEventListener('change', (e) => {
 });
 
 removeFileBtn.addEventListener('click', () => {
-    currentBase64Image = null;
-    imagePreview.src = '';
     filePreviewContainer.classList.add('hidden');
+    currentBase64Image = null;
+    imagePreview.src = 'about:blank'; // Use a blank page to avoid broken icon
     fileInput.value = '';
 });
 
