@@ -57,10 +57,18 @@ MedAssist AI is a production-grade, full-stack medical chatbot designed to provi
    python app.py
    ```
 
-### 2️⃣ Frontend Setup
-1. No installation required!
-2. Simply open `frontend/index.html` in any modern web browser.
-3. Start chatting with MedAssist AI.
+### 🚀 Hosting on Render (Recommended)
+Since the project has a subfolder structure, use these exact settings on Render:
+
+#### **Backend (Web Service)**
+- **Build Command**: `pip install -r backend/requirements.txt`
+- **Start Command**: `gunicorn --bind 0.0.0.0:$PORT --chdir backend app:app`
+- **Environment Variables**: Add `OPENAI_API_KEY` in the **Environment** tab.
+
+#### **Frontend (Static Site)**
+- **Build Command**: (Leave empty)
+- **Publish Directory**: `frontend`
+- **Environment Variables**: None needed.
 
 ---
 
