@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedAssist AI - Premium Medical Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header>
+            <div class="logo-container">
+                <img src="logo.png" alt="MedAssist AI Logo" class="app-logo">
+                <h1>MedAssist AI</h1>
+            </div>
+            <p class="subtitle">Senior Medical Consultant & News Assistant</p>
+        </header>
+
+        <!-- Main Chat Area -->
+        <main id="chat-window">
+            <div class="message ai-message">
+                <img src="logo.png" alt="Assistant Avatar" class="avatar">
+                <div class="message-content">
+                    Hello! I am <strong>Dr. MedAssist</strong>, your Senior Medical Consultant. I can help you
+                    understand medical conditions, explain prescriptions, lab reports, or provide the latest medical
+                    news.
+                    <br><br>
+                    <em>How can I assist you today?</em>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer / Input Area -->
+        <footer>
+            <div id="file-preview-container" class="hidden">
+                <div class="preview-item">
+                    <img id="image-preview" src="" alt="Preview">
+                    <button id="remove-file-btn"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <label for="file-upload" class="upload-btn">
+                    <i class="fas fa-paperclip"></i>
+                </label>
+                <input type="file" id="file-upload" accept="image/*" hidden>
+
+                <textarea id="user-input" placeholder="Type your medical query here..." rows="1"></textarea>
+
+                <button id="send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+
+            <!-- Disclaimer -->
+            <div class="disclaimer">
+                <i class="fas fa-exclamation-triangle"></i>
+                This chatbot provides general medical information only and is not a substitute for professional medical
+                advice. Please consult a qualified healthcare provider for diagnosis or treatment.
+            </div>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
