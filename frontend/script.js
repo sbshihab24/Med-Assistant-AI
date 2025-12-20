@@ -7,7 +7,12 @@ const imagePreview = document.getElementById('image-preview');
 const removeFileBtn = document.getElementById('remove-file-btn');
 const loadingOverlay = document.getElementById('loading-overlay');
 
-const API_URL = 'http://127.0.0.1:5000/api/chat';
+// Auto-detect if we are running locally or on the web
+const API_BASE_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
+    ? 'http://127.0.0.1:5000'
+    : 'https://med-assistant-ai.onrender.com';
+
+const API_URL = `${API_BASE_URL}/api/chat`;
 const sessionId = Math.random().toString(36).substring(7);
 
 let currentBase64Image = null;
