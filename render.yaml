@@ -14,7 +14,7 @@ services:
         generateValue: true
 
   # 🎨 Frontend Web (Static Site)
-  - type: web
+  - type: static
     name: med-assist-frontend
     env: static
     region: oregon
