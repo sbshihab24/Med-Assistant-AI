@@ -13,6 +13,14 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", secrets.token_hex(16))
 CORS(app)
 
+@app.route('/')
+def home():
+    return jsonify({
+        "status": "online",
+        "message": "MedAssist AI API is running. Use /api/chat for assistant interactions.",
+        "author": "Mehedi Hasan Shihab"
+    })
+
 # In-memory session store (In production, use Redis or a DB)
 # Key: session_id, Value: list of messages
 chat_history = {}
