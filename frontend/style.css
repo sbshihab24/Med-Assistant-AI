@@ -313,6 +313,16 @@ textarea {
     height: 10px;
 }
 
+.chat-image-content {
+    display: block;
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 /* Markdown-like styling for AI responses */
 .message-content strong {
     color: var(--primary-dark);

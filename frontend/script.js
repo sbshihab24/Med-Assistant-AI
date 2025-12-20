@@ -47,7 +47,7 @@ async function sendMessage() {
     if (!message && !currentBase64Image) return;
 
     // Append User Message
-    appendMessage('user', message || "Shared an image");
+    appendMessage('user', message || "Shared an image", currentBase64Image ? imagePreview.src : null);
 
     const payload = {
         message: message,
@@ -80,7 +80,7 @@ async function sendMessage() {
     }
 }
 
-function appendMessage(role, text) {
+function appendMessage(role, text, imageUrl = null) {
     const msgDiv = document.createElement('div');
     msgDiv.className = `message ${role}-message`;
 
@@ -106,7 +106,8 @@ function appendMessage(role, text) {
             <div class="message-content">${formattedText}</div>
         `;
     } else {
-        msgDiv.innerHTML = `<div class="message-content">${formattedText}</div>`;
+        let imageHtml = imageUrl ? `<img src="${imageUrl}" class="chat-image-content">` : '';
+        msgDiv.innerHTML = `<div class="message-content">${imageHtml}${formattedText}</div>`;
     }
 
     chatWindow.appendChild(msgDiv);
