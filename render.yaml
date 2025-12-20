@@ -1,7 +1,7 @@
 version: "1"
 
 services:
-  # 📡 Backend API (Python Flask)
+  # � One-Link Full-Stack App (Backend + Frontend together)
   - type: web
     name: med-assistant-ai
     env: python
@@ -14,9 +14,3 @@ services:
         sync: false
       - key: FLASK_SECRET_KEY
         generateValue: true
-
-  # 🎨 Frontend Web (Static Site)
-  - type: static
-    name: med-assist-frontend
-    buildCommand: ""
-    staticPublishDir: frontend

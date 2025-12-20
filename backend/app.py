@@ -9,23 +9,21 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, 
+            static_folder='../frontend', 
+            static_url_path='/',
+            template_folder='../frontend')
 app.secret_key = os.getenv("FLASK_SECRET_KEY", secrets.token_hex(16))
 CORS(app)
 
 @app.route('/')
 def home():
-    print("Health check: Root route hit")
-    return jsonify({
-        "status": "online",
-        "message": "MedAssist AI API is running. Use /api/chat for assistant interactions.",
-        "author": "Mehedi Hasan Shihab"
-    })
+    print("Serving Frontend UI")
+    return app.send_static_file('index.html')
 
 @app.route('/health')
 def health():
-    print("Health check: /health route hit")
-    return jsonify({"status": "healthy"})
+    return jsonify({"status": "healthy", "author": "Mehedi Hasan Shihab"})
 
 # In-memory session store (In production, use Redis or a DB)
 # Key: session_id, Value: list of messages
