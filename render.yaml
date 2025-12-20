@@ -1,0 +1,23 @@
+services:
+  # 📡 Backend API (Python Flask)
+  - type: web
+    name: med-assist-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r backend/requirements.txt"
+    startCommand: "gunicorn --bind 0.0.0.0:$PORT --chdir backend app:app"
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false # Set this in the Render dashboard manually
+      - key: FLASK_SECRET_KEY
+        generateValue: true
+
+  # 🎨 Frontend Web (Static Site)
+  - type: web
+    name: med-assist-frontend
+    env: static
+    region: oregon
+    plan: free
+    buildCommand: ""
+    staticPublishDir: frontend
