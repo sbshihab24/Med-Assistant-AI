@@ -84,12 +84,21 @@ function appendMessage(role, text) {
     const msgDiv = document.createElement('div');
     msgDiv.className = `message ${role}-message`;
 
-    // Convert newlines to breaks and simple bolding/links
-    const formattedText = text
+    // Convert headers (### Header) to styled divs with icons
+    let formattedText = text
+        .replace(/^###\s+(.*$)/gm, '<div class="chat-header"><i class="fas fa-stethoscope"></i> $1</div>')
+        .replace(/\n\n/g, '<div class="spacing"></div>')
         .replace(/\n/g, '<br>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="highlight">$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>')
         .replace(/\[(.*?)\]\s*\((.*?)\)/gs, '<a href="$2" target="_blank" class="chat-link">$1 <i class="fas fa-external-link-alt"></i></a>');
+
+    // Add specific medical emojis for common headers
+    formattedText = formattedText
+        .replace(/Why These Symptoms Matter/gi, 'Why These Symptoms Matter 💡')
+        .replace(/Important Next Steps/gi, 'Important Next Steps 👣')
+        .replace(/Emergency/gi, 'Emergency 🚨')
+        .replace(/Recommendation/gi, 'Recommendation 📋');
 
     if (role === 'ai') {
         msgDiv.innerHTML = `

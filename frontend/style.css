@@ -289,8 +289,28 @@ textarea {
     }
 }
 
-.hidden {
-    display: none !important;
+.message-content .chat-header {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a73e8;
+    margin: 15px 0 8px 0;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #e8f0fe;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.message-content .highlight {
+    color: #1557b0;
+    font-weight: 700;
+    background: #e8f0fe;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.spacing {
+    height: 10px;
 }
 
 /* Markdown-like styling for AI responses */
