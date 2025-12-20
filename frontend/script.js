@@ -24,21 +24,26 @@ userInput.addEventListener('input', () => {
 fileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            currentBase64Image = event.target.result.split(',')[1];
-            imagePreview.src = event.target.result;
-            filePreviewContainer.classList.remove('hidden');
-        };
-        reader.readAsDataURL(file);
-    }
-});
+        const fileType = file.type;
+        const fileName = file.name;
 
-removeFileBtn.addEventListener('click', () => {
-    filePreviewContainer.classList.add('hidden');
-    currentBase64Image = null;
-    imagePreview.src = 'about:blank'; // Use a blank page to avoid broken icon
-    fileInput.value = '';
+        // Show file visual
+        filePreviewContainer.classList.remove('hidden');
+
+        if (fileType.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                currentBase64Image = event.target.result.split(',')[1];
+                imagePreview.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            // For non-image files (PDF, CSV, etc.)
+            imagePreview.src = 'https://cdn-icons-png.flaticon.com/512/2991/2991108.png'; // Document Icon
+            currentBase64Image = "DOCUMENT_PLACEHOLDER"; // Signal to backend if we add doc processing
+            // Note: GPT-4o Vision still needs images. For now we show the doc icon.
+        }
+    }
 });
 
 // Send Message Logic
@@ -47,7 +52,7 @@ async function sendMessage() {
     if (!message && !currentBase64Image) return;
 
     // Append User Message
-    appendMessage('user', message || "Shared an image", currentBase64Image ? imagePreview.src : null);
+    appendMessage('user', message || "Shared a document", currentBase64Image && currentBase64Image !== "DOCUMENT_PLACEHOLDER" ? imagePreview.src : null);
 
     const payload = {
         message: message,
@@ -60,8 +65,8 @@ async function sendMessage() {
     userInput.style.height = 'auto';
     removeFileBtn.click(); // Clear preview
 
-    // Show Loader
-    showLoader(true);
+    // Show Thinking Bubble
+    const thinkingBubble = showThinkingBubble();
 
     try {
         const response = await fetch(API_URL, {
@@ -71,34 +76,62 @@ async function sendMessage() {
         });
 
         const data = await response.json();
+        thinkingBubble.remove();
         appendMessage('ai', data.response);
     } catch (error) {
+        thinkingBubble.remove();
         appendMessage('ai', 'Sorry, I encountered an error. Please make sure the backend server is running.');
         console.error('Error:', error);
-    } finally {
-        showLoader(false);
     }
+}
+
+function showThinkingBubble() {
+    const bubble = document.createElement('div');
+    bubble.className = 'thinking-bubble';
+    bubble.innerHTML = `<img src="logo.png" style="width:24px; height:24px;"><span>Dr. MedAssist is analyzing...</span>`;
+    chatWindow.appendChild(bubble);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+    return bubble;
 }
 
 function appendMessage(role, text, imageUrl = null) {
     const msgDiv = document.createElement('div');
     msgDiv.className = `message ${role}-message`;
 
-    // Convert headers (### Header) to styled divs with icons
+    // Map Headers to Medical Emojis
+    const headerIcons = {
+        'Blood': '🩸',
+        'Lab': '🧪',
+        'Leukocyte': '🔬',
+        'Immune': '🛡️',
+        'Heart': '🫀',
+        'Brain': '🧠',
+        'Lung': '🫁',
+        'Bone': '🦴',
+        'Kidney': '🧼',
+        'Sugar': '🍬',
+        'Next Steps': '👣',
+        'Warning': '⚠️',
+        'Critical': '🚨'
+    };
+
+    // Convert headers (### Header) to styled divs with dynamic icons
     let formattedText = text
-        .replace(/^###\s+(.*$)/gm, '<div class="chat-header"><i class="fas fa-stethoscope"></i> $1</div>')
+        .replace(/^###\s+(.*$)/gm, (match, p1) => {
+            let icon = '🩺'; // Default
+            for (let key in headerIcons) {
+                if (p1.includes(key)) {
+                    icon = headerIcons[key];
+                    break;
+                }
+            }
+            return `<div class="chat-header">${icon} ${p1}</div>`;
+        })
         .replace(/\n\n/g, '<div class="spacing"></div>')
         .replace(/\n/g, '<br>')
         .replace(/\*\*(.*?)\*\*/g, '<strong class="highlight">$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>')
         .replace(/\[(.*?)\]\s*\((.*?)\)/gs, '<a href="$2" target="_blank" class="chat-link">$1 <i class="fas fa-external-link-alt"></i></a>');
-
-    // Add specific medical emojis for common headers
-    formattedText = formattedText
-        .replace(/Why These Symptoms Matter/gi, 'Why These Symptoms Matter 💡')
-        .replace(/Important Next Steps/gi, 'Important Next Steps 👣')
-        .replace(/Emergency/gi, 'Emergency 🚨')
-        .replace(/Recommendation/gi, 'Recommendation 📋');
 
     if (role === 'ai') {
         msgDiv.innerHTML = `
@@ -111,8 +144,6 @@ function appendMessage(role, text, imageUrl = null) {
     }
 
     chatWindow.appendChild(msgDiv);
-
-    // Scroll to bottom
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
