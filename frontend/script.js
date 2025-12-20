@@ -46,6 +46,13 @@ fileInput.addEventListener('change', (e) => {
     }
 });
 
+removeFileBtn.addEventListener('click', () => {
+    filePreviewContainer.classList.add('hidden');
+    currentBase64Image = null;
+    imagePreview.src = 'about:blank';
+    fileInput.value = '';
+});
+
 // Send Message Logic
 async function sendMessage() {
     const message = userInput.value.trim();
