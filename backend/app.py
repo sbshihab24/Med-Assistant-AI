@@ -15,11 +15,17 @@ CORS(app)
 
 @app.route('/')
 def home():
+    print("Health check: Root route hit")
     return jsonify({
         "status": "online",
         "message": "MedAssist AI API is running. Use /api/chat for assistant interactions.",
         "author": "Mehedi Hasan Shihab"
     })
+
+@app.route('/health')
+def health():
+    print("Health check: /health route hit")
+    return jsonify({"status": "healthy"})
 
 # In-memory session store (In production, use Redis or a DB)
 # Key: session_id, Value: list of messages
